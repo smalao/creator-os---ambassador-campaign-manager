@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator OS – Ambassador Campaign Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['DM Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f4ff',
+              100: '#dbe4ff',
+              200: '#bac8ff',
+              300: '#91a7ff',
+              400: '#748ffc',
+              500: '#5c7cfa',
+              600: '#4c6ef5',
+              700: '#4263eb',
+              800: '#3b5bdb',
+              900: '#364fc7',
+            },
+            surface: {
+              0: '#ffffff',
+              50: '#f8f9fb',
+              100: '#f1f3f5',
+              200: '#e9ecef',
+              300: '#dee2e6',
+              400: '#ced4da',
+              500: '#adb5bd',
+              600: '#868e96',
+              700: '#495057',
+              800: '#343a40',
+              900: '#212529',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'DM Sans', system-ui, sans-serif; }
+    body { background: #f8f9fb; }
+    .fade-in { animation: fadeIn 0.3s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .slide-in { animation: slideIn 0.25s ease-out; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+    .modal-backdrop { animation: backdropIn 0.2s ease-out; }
+    @keyframes backdropIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-content { animation: modalIn 0.25s ease-out; }
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.5; cursor: pointer; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #dee2e6; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ced4da; }
+    .task-row:hover { background: #f8f9fb; }
+    .campaign-card { transition: box-shadow 0.2s ease, transform 0.15s ease; }
+    .campaign-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.06); transform: translateY(-1px); }
+    .stat-card { transition: box-shadow 0.2s ease; }
+    .stat-card:hover { box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+    .btn-primary { transition: all 0.15s ease; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(76,110,245,0.3); }
+    .btn-primary:active { transform: translateY(0); }
+    .sidebar-link { transition: all 0.15s ease; }
+    .sidebar-link:hover { background: #f1f3f5; }
+    .sidebar-link.active { background: #f0f4ff; color: #4263eb; }
+    .progress-bar { transition: width 0.6s ease; }
+    .tag-pill { transition: all 0.1s ease; }
+  </style>
+</head>
+<body class="min-h-screen text-surface-900 antialiased">
+
+  <!-- App Shell -->
+  <div id="app" class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-64 bg-white border-r border-surface-200 flex flex-col fixed h-full z-30 lg:relative lg:translate-x-0 -translate-x-full lg:flex transition-transform duration-200">
+      <!-- Logo -->
+      <div class="px-5 py-5 border-b border-surface-100">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
+            <svg class="w-4.5 h-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <div>
+            <span class="font-bold text-sm tracking-tight text-surface-900">Creator OS</span>
+            <span class="block text-[10px] text-surface-500 font-medium tracking-wide uppercase">Ambassador Manager</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+        <button onclick="navigateTo('dashboard')" data-nav="dashboard" class="sidebar-link active w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium">
+          <svg class="w-[18px] h-[18px] opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
+          Dashboard
+        </button>
+        <button onclick="navigateTo('campaigns')" data-nav="campaigns" class="sidebar-link w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-surface-600">
+          <svg class="w-[18px] h-[18px] opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          Campaigns
+          <span id="campaignCount" class="ml-auto text-xs bg-surface-100 text-surface-600 px-1.5 py-0.5 rounded-md font-medium">0</span>
+        </button>
+        <button onclick="navigateTo('tasks')" data-nav="tasks" class="sidebar-link w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-surface-600">
+          <svg class="w-[18px] h-[18px] opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          All Tasks
+          <span id="taskCount" class="ml-auto text-xs bg-surface-100 text-surface-600 px-1.5 py-0.5 rounded-md font-medium">0</span>
+        </button>
+        <button onclick="navigateTo('rewards')" data-nav="rewards" class="sidebar-link w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-surface-600">
+          <svg class="w-[18px] h-[18px] opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Rewards
+        </button>
+
+        <div class="pt-4 pb-2 px-3">
+          <span class="text-[10px] font-semibold text-surface-400 uppercase tracking-wider">Quick Filters</span>
+        </div>
+        <button onclick="filterByStatus('overdue')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-surface-600">
+          <span class="w-2 h-2 rounded-full bg-red-400"></span>
+          Overdue
+          <span id="overdueCount" class="ml-auto text-xs bg-red-50 text-red-500 px-1.5 py-0.5 rounded-md font-medium">0</span>
+        </button>
+        <button onclick="filterByStatus('in-progress')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-surface-600">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          In Progress
+        </button>
+        <button onclick="filterByStatus('completed')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-surface-600">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          Completed
+        </button>
+      </nav>
+
+      <!-- User -->
+      <div class="px-4 py-3 border-t border-surface-100">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-bold">A</div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-surface-800 truncate">Ambassador</p>
+            <p class="text-[11px] text-surface-500 truncate">Web3 Creator</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile overlay -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/30 z-20 hidden lg:hidden"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 min-w-0 lg:ml-0">
+
+      <!-- Top Bar -->
+      <header class="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-surface-100">
+        <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-14">
+          <div class="flex items-center gap-3">
+            <button onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg hover:bg-surface-100 text-surface-600">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <h1 id="pageTitle" class="text-base font-semibold text-surface-900">Dashboard</h1>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="relative hidden sm:block">
+              <svg class="w-4 h-4 text-surface-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input id="searchInput" oninput="handleSearch(this.value)" type="text" placeholder="Search campaigns & tasks..." class="w-56 pl-9 pr-3 py-1.5 text-sm bg-surface-50 border border-surface-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-400 transition-all placeholder:text-surface-400">
+            </div>
+            <button onclick="openModal('campaign')" class="btn-primary flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-3.5 py-1.5 rounded-lg">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+              <span class="hidden sm:inline">New Campaign</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Content Container -->
+      <div id="pageContent" class="p-4 sm:p-6 lg:p-8 max-w-7xl">
+        <!-- Content loaded dynamically -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div id="modalOverlay" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="flex items-start justify-center pt-[8vh] px-4 min-h-full">
+      <div id="modalContent" class="modal-content relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto">
+        <!-- Modal content loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
